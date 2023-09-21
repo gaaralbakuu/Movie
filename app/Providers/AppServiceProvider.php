@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\HoatHinh3DService;
+use App\Services\IMovieService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(IMovieService::class, HoatHinh3DService::class);
     }
 
     /**
@@ -19,6 +21,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
     }
 }
