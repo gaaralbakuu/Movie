@@ -13,6 +13,11 @@ class MovieController extends Controller
 
     public function index()
     {
+        return $this->movieService->getList();
+    }
+
+    public function update()
+    {
         return $this->movieService->updateItem(true);
     }
 }

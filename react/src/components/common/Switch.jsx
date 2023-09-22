@@ -14,9 +14,9 @@ function Switch({ checked, onChange }) {
             />
             <label
                 htmlFor="dark-mode"
-                className="inline-block w-[60px] h-[30px] rounded-3xl bg-gray-300 relative transition-[background] p-[2px]"
+                className="inline-block w-[52px] h-[28px] rounded-3xl bg-gray-300 relative transition-[background] p-[2px]"
             >
-                <div className="w-[26px] h-[26px] rounded-full bg-white absolute transition-[margin-left]"></div>
+                <div className="w-[24px] h-[24px] rounded-full bg-white transition-[margin-left]"></div>
             </label>
         </>
     );

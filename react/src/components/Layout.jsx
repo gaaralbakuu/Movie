@@ -30,7 +30,7 @@ function Layout() {
     }, [darkMode]);
 
     return (
-        <div className="flex h-full">
+        <div className="flex h-full bg-gray-200 dark:bg-gray-700">
             <div className="max-w-xl w-full mx-auto flex flex-col shadow">
                 <div className="flex-1 flex flex-col">
                     <Outlet />

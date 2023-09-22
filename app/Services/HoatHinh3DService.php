@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Http;
 
 class HoatHinh3DService implements IMovieService
 {
+    public function getList(){
+        return Article::query()->orderBy("updated_at")->get();
+    }
+
     public function updateItem(bool $force = false)
     {
         $data = Http::get(base64_decode('aHR0cHM6Ly9ob2F0aGluaDNkLmJpeg=='));
