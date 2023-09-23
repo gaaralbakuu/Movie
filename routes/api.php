@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/getList', [MovieController::class, 'index']);
+Route::prefix("home")->group(function () {
+    Route::get('/getList', [MovieController::class, 'index']);
 
-Route::get('/refresh', [MovieController::class, 'update']);
+    Route::get('/refresh', [MovieController::class, 'update']);
+
+    Route::get('/update-chapter', [MovieController::class, 'updateChapter']);
+});
