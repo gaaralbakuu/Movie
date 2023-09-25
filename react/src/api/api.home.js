@@ -7,3 +7,7 @@ export const homeGetList = async () => {
 export const homeRefresh = async () => {
     return await apiAxios.get("/api/home/refresh");
 };
+
+export const homeUpdateChapter = async ({ id, signal }) => {
+    return await apiAxios.get(`/api/home/update-chapter?id=${id}`, { signal });
+};
