@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import menu from "../data/menu";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { homeGetList, homeRefresh } from "../api/api.home";
+import { homeGetList, homeRefresh, homeUpdateChapter } from "../api/api.home";
 import Image from "../components/common/Image";
 import Scrollbars from "react-custom-scrollbars";
 import "react-virtualized/styles.css";
@@ -36,6 +36,40 @@ function Home() {
         });
     }
 
+    function handleFetch(id) {
+        return () => {
+            let tempFetchs = [...fetchings];
+            const findItem = tempFetchs.filter((item) => item.id === id);
+            if (findItem.length === 0) {
+                const controller = new AbortController();
+                tempFetchs.push({ id, controller: controller });
+                homeUpdateChapter({ id, signal: controller.signal }).then(
+                    (res) => {
+                        toast("Update list chapter success", {
+                            type: "success",
+                        });
+                        setFetchings((state) =>
+                            state.filter((item) => item.id !== id)
+                        );
+                    }
+                );
+            }
+            setFetchings(tempFetchs);
+        };
+    }
+
+    function handleRemoveFetch(id) {
+        return () => {
+            let tempFetchs = [...fetchings];
+            const findItem = tempFetchs.filter((item) => item.id === id);
+            if (findItem.length === 1) {
+                findItem[0].controller.abort();
+                tempFetchs = tempFetchs.filter((item) => item.id !== id);
+            }
+            setFetchings(tempFetchs);
+        };
+    }
+
     useEffect(() => {
         if (listRef.current)
             listRef.current.Grid._scrollingContainer = scrollRef.current.view;
@@ -47,7 +81,8 @@ function Home() {
     const isFetch = useCallback(
         (id) => {
             if (fetchings.length === 0) return false;
-            if (fetchings.indexOf(id) === -1) return false;
+            if (fetchings.findIndex((item) => item.id === id) === -1)
+                return false;
             return true;
         },
         [fetchings]
@@ -138,7 +173,7 @@ function Home() {
                                         width={width}
                                         height={height}
                                         rowCount={articles.length}
-                                        rowHeight={205}
+                                        rowHeight={206}
                                         rowRenderer={({
                                             key, // Unique key within array of rows
                                             index, // Index of row within collection
@@ -149,12 +184,18 @@ function Home() {
                                             <div
                                                 key={key}
                                                 style={style}
-                                                className="p-3 flex relative"
+                                                className={`p-3 flex relative ${
+                                                    index !== 0
+                                                        ? "border-t border-solid border-gray-200 dark:border-gray-700"
+                                                        : ""
+                                                }`}
                                             >
                                                 {isFetch(
                                                     articles[index].id
                                                 ) && (
-                                                    <div className="absolute inset-0 bg-white/50 dark:bg-black/50 z-10 backdrop-blur-[1px] flex items-center justify-center">
+                                                    <div
+                                                        className={`absolute inset-0 bg-white/50 dark:bg-black/50 z-10 backdrop-blur-[1px] flex items-center justify-center`}
+                                                    >
                                                         <div className="flex flex-col gap-2">
                                                             <div className="text-sm dark:text-white flex items-center">
                                                                 <div role="status">
@@ -182,7 +223,14 @@ function Home() {
                                                                 fetching...
                                                             </div>
                                                             <div className="flex justify-center">
-                                                                <div className="bg-red-500 hover:bg-red-600 text-white text-xs px-2 leading-[0] rounded-md cursor-pointer flex gap-1 items-center py-1">
+                                                                <div
+                                                                    className="bg-red-500 hover:bg-red-600 text-white text-xs px-2 leading-[0] rounded-md cursor-pointer flex gap-1 items-center py-1"
+                                                                    onClick={handleRemoveFetch(
+                                                                        articles[
+                                                                            index
+                                                                        ].id
+                                                                    )}
+                                                                >
                                                                     <svg
                                                                         xmlns="http://www.w3.org/2000/svg"
                                                                         fill="none"
@@ -266,7 +314,14 @@ function Home() {
                                                                 </svg>
                                                                 <div>Watch</div>
                                                             </div>
-                                                            <div className="bg-gray-400 hover:bg-gray-500 text-black dark:bg-gray-500 rounded-md px-2 py-1 dark:text-white text-sm flex gap-1 items-center cursor-pointer dark:hover:bg-gray-600">
+                                                            <div
+                                                                className="bg-gray-400 hover:bg-gray-500 text-black dark:bg-gray-500 rounded-md px-2 py-1 dark:text-white text-sm flex gap-1 items-center cursor-pointer dark:hover:bg-gray-600"
+                                                                onClick={handleFetch(
+                                                                    articles[
+                                                                        index
+                                                                    ].id
+                                                                )}
+                                                            >
                                                                 <svg
                                                                     xmlns="http://www.w3.org/2000/svg"
                                                                     fill="none"
