@@ -70,7 +70,7 @@ class HoatHinh3DService implements IMovieService
             $data = Http::get($article->path);
             $content = explode('<ul id="listsv-1" class="halim-list-eps">', $data);
             $content = explode('</ul><div class="clearfix"></div>', $content[1])[0];
-            preg_match_all('/<li\sclass="halim-episode\s(?:.+?)"><a\shref="(.+?)"\stitle="(?:\d+)"><span\sclass="(?:.+?)\sbox-shadow\shalim-btn"\sdata-post-id="(?:\d+)"\sdata-server="(?:\d+)"\sdata-episode-slug="(?:.+?)"\sdata-position(?:="\w+")?\sdata-embed="(?:.+?)">(.+?)<\/span><\/a><\/li>/is', $content, $chapters);
+            preg_match_all('/<li\sclass="halim-episode\s(?:.+?)"><a\shref="(.+?)"\stitle="(?:.+?)"><span\sclass="(?:.+?)\sbox-shadow\shalim-btn"\sdata-post-id="(?:.+?)"\sdata-server="(?:\d+)"\sdata-episode-slug="(?:.+?)"\sdata-position(?:="\w+")?\sdata-embed="(?:.+?)">(.+?)<\/span><\/a><\/li>/is', $content, $chapters);
 
             for ($i = 0; $i < count($chapters[1]); $i++) {
                 $chapter = Chapter::query()->where(['name' => $chapters[2][$i], 'article_id' => $article->id])->first();
@@ -87,7 +87,7 @@ class HoatHinh3DService implements IMovieService
                     ]);
                 }
             }
-            var_dump($chapters);
+            // var_dump($chapters);
         }
         // https://hoathinh3d.biz/dau-la-dai-luc-2-tuyet-the-duong-mon
 
